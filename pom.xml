@@ -89,6 +89,12 @@
             <artifactId>powermock-api-mockito2</artifactId>
             <version>1.7.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>2.9.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -97,11 +103,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <skipTests>true</skipTests>
+                    <reuseForks>true</reuseForks>
+                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
                 </configuration>
                 <executions>
                     <execution>
@@ -132,8 +140,8 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
-            <plugin>
+            </plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
@@ -147,7 +155,7 @@
                         <include>**/*Test.java</include>
                     </includes>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -164,43 +172,49 @@
                     <useFile>false</useFile>
                     <includes>
                         <include>**/*IT.java</include>
+                        <include>**/*Tests.java</include>
                     </includes>
                 </configuration>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.2.0-M1</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>5.6.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.7.201606060606</version>
+                <configuration>
+                    <output>file</output>
+                    <append>true</append>
+                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                </configuration>
                 <executions>
+                    <!-- prepare agent for measuring integration tests -->
                     <execution>
+                        <id>prepare-integration-tests</id>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                       <!-- <configuration>
+                            <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                        </configuration>-->
                     </execution>
                     <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
+                        <id>jacoco-site</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>
+                   <!-- <execution>
+                        <id>jacoco-site</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                       &lt;!&ndash; <configuration>
+                            <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                        </configuration>&ndash;&gt;
+                    </execution>-->
                 </executions>
             </plugin>
         </plugins>

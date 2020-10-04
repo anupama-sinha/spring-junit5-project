@@ -59,6 +59,12 @@ Dependency across Tests isn’t a good practice.
 12. Always check IDs for Null, Duplicate & Valid
 13. Best practise for Unit Testing is to use @Mock. And for Integration testing, @MockBean is used which integrated in Spring Application Context
 
+### Types of Mocking Framework
+1. Proxy based 
+Eg - EasyMock, JMock, Mockito)
+2. Byte code Manipulation/Classloader remapping
+Eg : jMockit, PowerMock)
+
 ### Mockito Framework Annotations
 * @Mock : Mocks the dependency classes
 * @InjectMocks : Mocks the Class Under Test(CUT)/System Under Test(SUT)
@@ -255,7 +261,20 @@ class SubtractOperationSpyTest{
 Integration Testing with SpringBootTest Annotation
 * Scans for SpringBootApplication annotation & loads entire application context from there.
 
-### Integration Testing with SpringBootTest Annotation
+### Integration Testing
+#### Option 1 : SpringBootTest Annotation with RestTemplate
 * Scans for SpringBootApplication annotation & loads entire application context from there.
+* This is from Spring Starter Test dependency usage
+#### Option 2 : RestAssured Option
+* Since RestAssured internally uses Groovy. It would be good to follow the same pattern
+* RestAssured framework offers fluent BDD style interface than Spring Boot Test
+> https://stackoverflow.com/a/52052986/14179048
+
 
 Will come up with a detailed separate post on Powermock Framework & Integration Testing. Stay tuned in. :smiley: :pray:
+
+### References
+* [Types of Mocking Framwork](https://medium.com/@piraveenaparalogarajah/what-is-mocking-in-testing-d4b0f2dbe20a)
+* [Famous Martin Fowler Material on Mocks & Stubs](https://martinfowler.com/articles/mocksArentStubs.html)
+* [xUnit Design Pattern of Testing](http://xunitpatterns.com/)
+* [Jacoco-Java Code Coverage](https://www.eclemma.org/jacoco/trunk/doc/maven.html)
