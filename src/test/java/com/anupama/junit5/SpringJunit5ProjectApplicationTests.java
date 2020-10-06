@@ -19,10 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.swing.*;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SpringJunit5ProjectApplicationTests {
 
     @BeforeEach
@@ -44,6 +46,19 @@ public class SpringJunit5ProjectApplicationTests {
 //                and().body("RestResponse.result.name", is("\"{\"products\":[{\"name\":\"Pen\",\"id\":1},{\"name\":\"Pencil\",\"id\":2},{\"name\":\"Eraser\",\"id\":3}]}\""));
 
 
+    }
+
+    // Method 2 : @SpringBootTest + estTemplate
+    @MockBean
+    private TestRestTemplate restTemplate;
+
+    @Test
+    public void testGetProductAPI_RestTemplate(){
+        String result = this.restTemplate.getForObject("http://localhost:8080/hello",String.class);
+
+        assertNotEquals(("Hello World"),result);
+
+        assertDoesNotThrow(()->{});
     }
 }
 

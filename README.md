@@ -6,6 +6,7 @@
 * Compile time errors handled by Compiler
 * Maximum exceptions handled by Coder.
 * But there can still be various scopes of logical errors and   missing out on handling exceptions and n-number of reasons always.
+* Application might run in production but might not pass business logic of Unit Testing written earlier
 
 ### History
 | Year | Version |
@@ -31,7 +32,7 @@ Test Engine/Platform/Runner/Core : junit-jupiter-engine
 ```
 JUnit API : junit-jupiter-api
 Vintage API(Junit4 API & older ones supported) : junit-vintage-engine
-3rd Party API : Support for 3rd Party APIs
+3rd Party API : Support for 3rd Party APIs(Needs to implement interfaces of junit-jupiter-api
 ```
 
 ### Annotations for Test Lifecycle Hooks
@@ -42,7 +43,7 @@ Vintage API(Junit4 API & older ones supported) : junit-vintage-engine
 * @AfterEach— After each Test
 * @AfterAll — After everything in Class runs
 
-Dependency across Tests isn’t a good practice.
+Dependency across Tests isn’t a good practice. But if required then Order annotation can be used
 
 ### Best Practices for Unit Testing
 1. Maintain Code Readability
@@ -58,6 +59,7 @@ Dependency across Tests isn’t a good practice.
 11. Always test arguments for Null, Empty String, Special Character, As per expectaton and exceptions
 12. Always check IDs for Null, Duplicate & Valid
 13. Best practise for Unit Testing is to use @Mock. And for Integration testing, @MockBean is used which integrated in Spring Application Context
+14. @MockBean is used when we loaded Beans in Spring IOC Container for one class. But need bean of another layer not loaded. Then of Spring Test, we can use @MockBean to load the same
 
 ### Types of Mocking Framework
 1. Proxy based 
@@ -95,6 +97,9 @@ class SubtractOperationTest{
 ```
 
 ## 2. Mocking Classes
+* Dependency : mockito-junit-jupiter
+* MockitoExtension replaces ancient MockitoAnnotation.init()
+* SpringExtension loads the entire Spring Context
 ```xml
 <dependency>
      <groupId>org.mockito</groupId>
@@ -223,6 +228,29 @@ class ProductRepositoryTest{
 * Almost creates a class
 * Also can override a class 
 * Only used for dependencies like @Mock. But not for SUT as @InjectMocks does
+* Below is one famous usecase where we need to write to List. But the CustomObject change isn't rquired. So in those times, Spy is used
+
+```java
+List<CustomObject> cusList;
+CustomObject c1;
+CustomObject c2;
+cusList.add(c1);
+cusList.add(c2);
+```
+
+```java
+@Spy
+List<CustomObject> spyList;
+
+@Mock
+CustomObject c1;
+
+@Mock
+CustomObject c2;
+
+spyList.add(c1);
+spyList.add(c2);
+```
 
 ```java
 @ExtendWith(MockitoExtension.class)

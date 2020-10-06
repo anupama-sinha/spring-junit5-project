@@ -29,7 +29,7 @@ class SubtractOperationMockTest{
         int expected = 14;
         //when
 //        when(mockCheckNumber.checkValidity(14,7)).thenReturn(7);
-        int actual = testClass.subtract(14,7);
+        int actual = testClass.subtract(14,pr);
         //then
         assertEquals(expected,actual,"Positive Mock Testing");
     }
